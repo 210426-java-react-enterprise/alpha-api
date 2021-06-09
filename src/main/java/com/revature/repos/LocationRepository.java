@@ -20,4 +20,6 @@ public interface LocationRepository extends JpaRepository<Location,Integer>
     Set<Location> findLocationByCountryAndStateAndCounty(String country, String state, String county);
     Set<Location> findLocationByCountryAndStateAndCity(String country, String state, String city);
     Set<Location> findLocationByCountryAndStateAndCountyAndCity(String country, String state, String county, String city);
+    Boolean existsByCountryAndState(String country, String state);
+    Boolean existsByCountryAndStateAndCity(String country, String state, String city);
 }

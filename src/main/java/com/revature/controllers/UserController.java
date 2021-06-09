@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/users")
 public class UserController
@@ -44,16 +44,16 @@ public class UserController
                 consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> validateUser(@RequestBody User newUser)
     {
-        if (userRepository.findUserByUsername(newUser.getUsername()) != null)
+        if (userRepository.existsByUsername(newUser.getUsername()))
         {
             return new ResponseEntity<>("username", HttpStatus.CONFLICT);
-        } else if (userRepository.findUserByEmail(newUser.getEmail()) != null)
+        } else if (userRepository.existsByEmail(newUser.getEmail()))
         {
             return new ResponseEntity<>("email",HttpStatus.CONFLICT);
-        } else if (locationRepository.findLocationByCountryAndState("usa", newUser.getState()).isEmpty())
+        } else if (!locationRepository.existsByCountryAndState("usa", newUser.getState()))
         {
             return new ResponseEntity<>("state", HttpStatus.NOT_ACCEPTABLE);
-        } else if (locationRepository.findLocationByCountryAndStateAndCity("usa", newUser.getState(), newUser.getCity()).isEmpty())
+        } else if (!locationRepository.existsByCountryAndStateAndCity("usa", newUser.getState(), newUser.getCity()))
         {
             return new ResponseEntity<>("city", HttpStatus.NOT_ACCEPTABLE);
         } else
