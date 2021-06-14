@@ -28,10 +28,6 @@ public class SMSController {
         }
         webSocket.convertAndSend(TOPIC_DESTINATION,getTimeStamp()+" SMS has been sent!: "+sms.getTo());
     }
-    public void smsCallback(MultiValueMap<String,String> map){
-        smsService.receive(map);
-        webSocket.convertAndSend(TOPIC_DESTINATION,getTimeStamp()+"Callback request from Trilio:"+map.toString());
-    }
     private String getTimeStamp(){
         return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
     }
