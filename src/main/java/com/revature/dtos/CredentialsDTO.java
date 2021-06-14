@@ -33,4 +33,12 @@ public class CredentialsDTO
     {
         this.password = password;
     }
+
+    @Override
+    public String toString() {
+        return "CredentialsDTO{" +
+                "username='" + username +
+                ", \n  password='" + password  +
+                '}';
+    }
 }

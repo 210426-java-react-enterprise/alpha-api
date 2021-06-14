@@ -11,6 +11,10 @@ import org.springframework.web.servlet.view.RedirectView;
 @RequestMapping(value = {"/api/docs", "/about"})
 public class ApiDocController
 {
+    public ApiDocController(){
+        super();
+    }
+
     @GetMapping
     @ResponseStatus(HttpStatus.SEE_OTHER)
     public RedirectView redirectToApiDocumentation() {

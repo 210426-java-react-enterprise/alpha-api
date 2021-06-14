@@ -36,7 +36,7 @@ public class EventController {
     private final LocationService locationService;
     private final JwtUtility jwtUtility;
     private final UserService userService;
-    SimpleDateFormat jsFormat = new SimpleDateFormat(("EE MMM d y H:m:s 'GMT'Z (zz)"));
+    SimpleDateFormat jsFormat;
 
    @Autowired
     public EventController(EventRepository eventRepository, EventAPIService eventAPIService, LocationService locationService, JwtUtility utility, UserService userService)
@@ -46,6 +46,7 @@ public class EventController {
         this.locationService = locationService;
         this.jwtUtility = utility;
         this.userService = userService;
+        jsFormat = new SimpleDateFormat(("EE MMM d y H:m:s 'GMT'Z (zz)"));
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -103,21 +104,18 @@ public class EventController {
 
     @RequestMapping("/save")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Event> saveEvent(@RequestBody EventDTO event){
-//       String username = jwtUtility.getUserNameFromJwtToken(jwtHeader);
-        UserDetails userDetails =
-                (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public ResponseEntity<Event> saveEvent(@RequestBody EventDTO event,HttpServletRequest req)throws ParseException{
+
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
        Event eventToSave = new Event();
        eventToSave.setEvent_url(event.getEventUrl());
        eventToSave.setUser_id(userService.getUserByUsername(userDetails.getUsername()).getId());
-        try {
-            eventToSave.setEvent_date(new Date(jsFormat.parse(event.getEventDate()).getTime()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+       long date = jsFormat.parse(event.getEventDate()).getTime();
+       eventToSave.setEvent_date(new Date(date));
+
         eventToSave.setEvent_title(event.getEventTitle());
-       eventAPIService.saveEvent(eventToSave);
+        eventAPIService.saveEvent(eventToSave);
 
        return ResponseEntity.accepted().body(eventToSave);
 

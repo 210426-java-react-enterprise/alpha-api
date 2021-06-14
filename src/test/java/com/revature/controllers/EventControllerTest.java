@@ -125,6 +125,17 @@ public class EventControllerTest {
                 .andExpect(content().contentType(MediaType.TEXT_PLAIN + ";charset=ISO8859-1"));
 
     }
+    @Test
+    @WithUserDetails("seantaba")
+    public void testSaveEvent() throws Exception {
+        User mockAdminUser2 = new User();
+        mockAdminUser2.setId(1);
+        mockAdminUser2.setUsername("seantaba");
+        mockAdminUser2.setPassword("password");
+        mockAdminUser2.setRoles(Role.ADMIN);
+        String token = tokenGenerator.createJwt(mockAdminUser2);
+        this.mockMvc.perform(post("/events/save").header("Authorization", token));
+    }
 
     @Test
     @WithUserDetails("seantaba")
@@ -159,13 +170,13 @@ public class EventControllerTest {
         mockEvent.setUser_id(1);
         mockEvent.setEvent_id(100000);
         EventDTO mockDTO = new EventDTO();
-        mockDTO.setEventDate("2018-10-15T17:52:00Z");
+        mockDTO.setEventDate("Sun Jun 13 2021 19:00:00 GMT-0400 (Eastern Daylight Time)");
         mockDTO.setEventTitle("testTitle");
         mockDTO.setEventUrl("https://seatgeek.com/phish-tickets/eugene-oregon-matthew-knight-arena-2021-07-13-3-30-am/concert/5295569");
         mockDTO.setUserId(1);
         mockDTO.setToken(token);
-        this.mockMvc.perform(post("/events/save").content(mockDTO.toString()).contentType(MediaType.APPLICATION_JSON_VALUE).header("Authorization", token))
-                .andDo(print());
+        this.mockMvc.perform(post("/events/save").content(new ObjectMapper().writeValueAsString(mockDTO)).contentType(MediaType.APPLICATION_JSON_VALUE).header("Authorization", token))
+                .andDo(print()).andExpect(status().is2xxSuccessful());
 
     }
 
@@ -175,6 +186,41 @@ public class EventControllerTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    public void testGetAllEvents() throws Exception{
+        User mockAdminUser = new User();
+        mockAdminUser.setId(1);
+        mockAdminUser.setUsername("seantaba");
+        mockAdminUser.setPassword("password");
+        mockAdminUser.setRoles(Role.ADMIN);
+        String token = tokenGenerator.createJwt(mockAdminUser);
+
+        Event mockEvent = new Event();
+        mockEvent.setEvent_url("https://seatgeek.com/phish-tickets/eugene-oregon-matthew-knight-arena-2021-07-13-3-30-am/concert/5295569");
+        mockEvent.setEvent_title("testTitle");
+        this.mockMvc.perform(get("/events").header("Authorization", token))
+                .andExpect(status().is2xxSuccessful());
+
+    }
+
+    @Test
+    public void test_getEventsByInvalidUsername() throws Exception{
+        User mockAdminUser = new User();
+        mockAdminUser.setId(1);
+        mockAdminUser.setUsername("");
+        mockAdminUser.setPassword("password");
+        mockAdminUser.setRoles(Role.ADMIN);
+        String token = tokenGenerator.createJwt(mockAdminUser);
+
+        Event mockEvent = new Event();
+        mockEvent.setEvent_url("https://seatgeek.com/phish-tickets/eugene-oregon-matthew-knight-arena-2021-07-13-3-30-am/concert/5295569");
+        mockEvent.setEvent_title("testTitle");
+        this.mockMvc.perform(get("/events/user").header("Authorization", token))
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.TEXT_PLAIN + ";charset=ISO8859-1"));
+
     }
 
 

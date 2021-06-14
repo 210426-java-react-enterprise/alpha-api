@@ -49,20 +49,6 @@ public class UserController
 //
 //    }
 
-
-    @RequestMapping("/getUserByEmail")
-    public User getUserById(@RequestParam String uem)
-    {
-        return userRepository.findUserByEmail(uem).orElseThrow(ResourceNotFoundException::new);
-    }
-
-    @RequestMapping("/getUserByUsername")
-    public User getUserByUsername(@RequestParam String un)
-    {
-        return userRepository.findUserByUsername(un).orElseThrow(ResourceNotFoundException::new);
-    }
-
-
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<User> getAllUsers()
     {

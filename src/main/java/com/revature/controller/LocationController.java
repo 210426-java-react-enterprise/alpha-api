@@ -1,4 +1,4 @@
-package com.revature.controllers;
+package com.revature.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
