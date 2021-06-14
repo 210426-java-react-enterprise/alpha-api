@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import static org.springframework.http.MediaType.*;
 
-
 @CrossOrigin("*")
+@RestController
 @RequestMapping("/auth")
 public class AuthController {
 
