@@ -100,6 +100,23 @@ public void testSaveEvent() throws Exception {
     verify(mockEventRepository,times(1)).save(event);
 
 
+<<<<<<< HEAD
+=======
+@Test
+public void testEventProcess() throws Exception { 
+//TODO: Test goes here...
+
+/* 
+try { 
+   Method method = EventAPIService.getClass().getMethod("eventProcess", Event.class, LinkedHashMap<String,.class); 
+   method.setAccessible(true); 
+   method.invoke(<Object>, <Parameters>); 
+} catch(NoSuchMethodException e) { 
+} catch(IllegalAccessException e) { 
+} catch(InvocationTargetException e) { 
+} 
+*/ 
+>>>>>>> 04bcdc83280bef77f395f5354bb61857cf556a2e
 } 
 
 

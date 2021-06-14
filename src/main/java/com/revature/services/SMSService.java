@@ -33,9 +33,5 @@ public class SMSService {
         Twilio.init(ACCOUNT_SID,AUTH_TOKEN);
         Message.creator(new PhoneNumber(sms.getTo()), new PhoneNumber(FROM_NUMBER),sms.getMessage()).create();
     }
-
-
-    public void receive(MultiValueMap<String, String> map) {
-        // TODO
-    }
+    
 }
