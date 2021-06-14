@@ -120,13 +120,10 @@ public class UserService {
     @Transactional(readOnly = true)
     public User authenticate(String username, String password) throws AuthenticationException {
         User user = null;
-        try {
+
            user = userRepo.findUserByUsernameAndPassword(username, password)
                     .orElseThrow(AuthenticationException::new);
 
-        } catch (ResourceNotFoundException | DataSourceException e) {
-            e.printStackTrace();
-        }
         return user;
     }
 

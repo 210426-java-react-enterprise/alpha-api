@@ -135,7 +135,6 @@ public class UserServiceTest {
     public void testIsUserInvalidPassword() throws Exception {
         User expectedUser = new User();
         expectedUser.setUsername("testusername");
-        expectedUser.setPassword("");
         expectedUser.setEmail("testemail@email.com");
         expectedUser.setFirstName("firstName");
         expectedUser.setLastName("lastName");
