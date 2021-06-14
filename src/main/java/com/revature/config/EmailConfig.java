@@ -2,32 +2,45 @@
 
 package com.revature.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
-import org.thymeleaf.templatemode.TemplateMode;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Properties;
+
 
 @Configuration
 public class EmailConfig {
-    private static final String Host;
-    private static final int Port;
+
+
+    private final static String Host;
+
+
+    private static final  int Port;
+
+
     private static final String Username;
+
+
     private static final String Password;
 
-
-    static {
+    static{
         Host = System.getenv("SPRING_EMAIL_HOST");
         Port = Integer.parseInt(System.getenv("SPRING_EMAIL_PORT"));
         Username = System.getenv("SPRING_EMAIL_USERNAME");
         Password = System.getenv("SPRING_EMAIL_PASSWORD");
+
     }
 
+//    public EmailConfig(String host, int port, String username, String password) {
+//        this.Host = host;
+//        Port = port;
+//        Username = username;
+//        Password = password;
+//    }
 
 
     public String getHost() {
