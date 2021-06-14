@@ -103,8 +103,7 @@ public class EventController {
 
     @RequestMapping("/save")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Event> saveEvent(@RequestBody EventDTO event,HttpServletRequest req){
-       String jwtHeader = req.getHeader("Authorization");
+    public ResponseEntity<Event> saveEvent(@RequestBody EventDTO event){
 //       String username = jwtUtility.getUserNameFromJwtToken(jwtHeader);
         UserDetails userDetails =
                 (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

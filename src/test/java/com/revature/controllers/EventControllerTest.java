@@ -3,7 +3,9 @@ package com.revature.controllers;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.config.WebSecurityConfig;
 import com.revature.dtos.CityStateLocationDTO;
+import com.revature.dtos.EventDTO;
 import com.revature.models.Event;
 import com.revature.models.Role;
 import com.revature.models.User;
@@ -12,17 +14,29 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
+
+import java.security.Principal;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -112,23 +126,48 @@ public class EventControllerTest {
 
     }
 
-//    @Test (expected = NestedServletException.class)
-//    public void test_saveEventByUsername() throws Exception{
-//        User mockAdminUser2 = new User();
-//        mockAdminUser2.setId(1);
-//        mockAdminUser2.setUsername("seantaba");
-//        mockAdminUser2.setPassword("password");
-//        mockAdminUser2.setRoles(Role.ADMIN);
-//        String token = tokenGenerator.createJwt(mockAdminUser2);
-//
-//        Event mockEvent = new Event();
-//        mockEvent.setEvent_url("https://seatgeek.com/phish-tickets/eugene-oregon-matthew-knight-arena-2021-07-13-3-30-am/concert/5295569");
-//        mockEvent.setEvent_title("testTitle");
-//        this.mockMvc.perform(post("/events/save").content(asJsonString(mockEvent)).contentType(MediaType.APPLICATION_JSON_VALUE).header("Authorization", token))
-//                .andDo(print())
-//                .andExpect(content().contentType(MediaType.TEXT_PLAIN + ";charset=ISO8859-1"));
-//
-//    }
+    @Test
+    @WithUserDetails("seantaba")
+    public void test_saveEventByUsername() throws Exception{
+        User mockAdminUser2 = new User();
+        mockAdminUser2.setId(1);
+        mockAdminUser2.setUsername("seantaba");
+        mockAdminUser2.setPassword("password");
+        mockAdminUser2.setRoles(Role.ADMIN);
+        String token = tokenGenerator.createJwt(mockAdminUser2);
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(mockAdminUser2.getUsername(), mockAdminUser2.getPassword());
+
+        // Authenticate the user
+//        Authentication authentication = Mockito.mock(Authentication.class);
+//// Mockito.whens() for your authorization object
+//        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+//        SecurityContextHolder.getContext();
+//        UserDetails mockPrincipal = Mockito.mock(UserDetails.class);
+//        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+//        Mockito.when(authentication.getPrincipal()).thenReturn(mockPrincipal);
+//        Mockito.when(mockPrincipal.getUsername()).thenReturn("seantaba");
+//        Mockito.when(mockPrincipal.getUsername()).thenReturn("password");
+
+
+
+//        SecurityContextHolder.setContext(securityContext);
+
+        Event mockEvent = new Event();
+        mockEvent.setEvent_url("https://seatgeek.com/phish-tickets/eugene-oregon-matthew-knight-arena-2021-07-13-3-30-am/concert/5295569");
+        mockEvent.setEvent_title("testTitle");
+        mockEvent.setEvent_date(new Date(123230400));
+        mockEvent.setUser_id(1);
+        mockEvent.setEvent_id(100000);
+        EventDTO mockDTO = new EventDTO();
+        mockDTO.setEventDate("2018-10-15T17:52:00Z");
+        mockDTO.setEventTitle("testTitle");
+        mockDTO.setEventUrl("https://seatgeek.com/phish-tickets/eugene-oregon-matthew-knight-arena-2021-07-13-3-30-am/concert/5295569");
+        mockDTO.setUserId(1);
+        mockDTO.setToken(token);
+        this.mockMvc.perform(post("/events/save").content(mockDTO.toString()).contentType(MediaType.APPLICATION_JSON_VALUE).header("Authorization", token))
+                .andDo(print());
+
+    }
 
     public static String asJsonString(final Object obj) {
         try {

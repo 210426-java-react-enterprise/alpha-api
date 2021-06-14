@@ -61,4 +61,14 @@ public class EventDTO {
         this.eventTitle = eventTitle;
     }
 
+    @Override
+    public String toString() {
+        return "EventDTO{" +
+                "userId=" + userId +
+                ", eventUrl='" + eventUrl + '\'' +
+                ", eventDate='" + eventDate + '\'' +
+                ", eventTitle='" + eventTitle + '\'' +
+                ", token='" + token + '\'' +
+                '}';
+    }
 }
