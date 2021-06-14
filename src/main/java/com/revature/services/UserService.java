@@ -126,7 +126,6 @@ public class UserService {
 
         return user;
     }
-
     public User getUserByUsername(String username) throws InvalidRequestException{
         return userRepo.findUserByUsername(username).orElseThrow( () -> new InvalidRequestException("Username not found"));
     }
