@@ -21,11 +21,17 @@ import java.io.UnsupportedEncodingException;
 public class MailServiceImpl implements MailService {
     private UserRepository userRepo;
 
-    @Autowired
-    private JavaMailSender emailSender;
+
+    private final JavaMailSender emailSender;
+
+
+    SpringTemplateEngine templateEngine;
 
     @Autowired
-    SpringTemplateEngine templateEngine;
+    public MailServiceImpl(JavaMailSender emailSender,SpringTemplateEngine templateEngine){
+        this.emailSender = emailSender;
+        this.templateEngine = templateEngine;
+    }
 
     @Override
     public void sendEmail(Mail mail) {
