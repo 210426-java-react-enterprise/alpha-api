@@ -51,7 +51,7 @@ public class UserController
 
 
     @RequestMapping("/getUserByEmail")
-    public User getUserById(@RequestParam String uem)
+    public User getUserByEmail(@RequestParam String uem)
     {
         return userRepository.findUserByEmail(uem).orElseThrow(ResourceNotFoundException::new);
     }

@@ -11,6 +11,11 @@ public class PrincipalDTO {
         this.username = jwtClaims.getSubject();
     }
 
+    public PrincipalDTO()
+    {
+        super();
+    }
+
     public int getId() {
         return id;
     }
