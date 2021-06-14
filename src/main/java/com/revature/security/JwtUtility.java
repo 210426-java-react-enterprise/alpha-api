@@ -21,10 +21,10 @@ public class JwtUtility {
     public String getUserNameFromJwtToken(String token) {
         // Needed to be explicit because when chained together couldnt see JWT token
         JwtParser parser = Jwts.parser();
-        token = token.replaceFirst(": Bearer ","");
+        String jwtToken = token.split(" ")[1].trim();
         Key signingKey = jwtConfig.getSigningKey();
         parser.setSigningKey(signingKey);
-        Jws<Claims> claimsJws = parser.parseClaimsJws(token);
+        Jws<Claims> claimsJws = parser.parseClaimsJws(jwtToken);
 
         return claimsJws.getBody().getSubject();
     }
