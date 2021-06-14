@@ -117,37 +117,6 @@ public class UserService {
 //        return false;
 //    }
 
-
-
-    //checks username availability
-//    @Transactional(propagation = Propagation.SUPPORTS)
-    public Boolean isUsernameAvailable(String username) {
-
-        if(!isValid(username, USERNAME)){
-            throw new InvalidRequestException("Invalid username");
-        }
-        try{
-            return userRepo.isUsernameAvailable(username);
-        }catch(ResourceNotFoundException e){
-            throw new DataSourceException(e);
-        }
-    }
-
-    //checks email availability
-//    @Transactional(propagation = Propagation.SUPPORTS)
-    public Boolean isEmailAvailable(String email) {
-       if(!isValid(email, EMAIL)){
-
-           throw new InvalidRequestException("Invalid email");
-       }
-       try {
-           return userRepo.isEmailAvailable(email);
-       }catch(ResourceNotFoundException e){
-          throw new DataSourceException(e);
-       }
-    }
-
-
     @Transactional(readOnly = true)
     public User authenticate(String username, String password) throws AuthenticationException {
         User user = null;

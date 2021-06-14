@@ -54,6 +54,7 @@ public void testLoadUserByUsername() throws Exception {
     expectedUser.setPassword("password");
     expectedUser.setRoles(Role.ADMIN);
 
+
     when(mockUserRepository.findUserByUsername(any())).thenReturn(java.util.Optional.of(expectedUser));
 
     UserDetails actualUser = sut.loadUserByUsername("Username");
@@ -63,7 +64,7 @@ public void testLoadUserByUsername() throws Exception {
 }
     @Test(expected = UsernameNotFoundException.class)
     public void testLoadUserByUsernameNoUserFound() throws Exception {
-      
+
 
         when(mockUserRepository.findUserByUsername(any())).thenThrow(new UsernameNotFoundException("User Not Found with username: "));
 
