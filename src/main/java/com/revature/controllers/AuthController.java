@@ -25,7 +25,6 @@ import static org.springframework.http.MediaType.*;
 
 @CrossOrigin("*")
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/auth")
 public class AuthController {
 
