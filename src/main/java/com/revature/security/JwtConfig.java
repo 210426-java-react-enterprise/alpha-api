@@ -9,7 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
-@PropertySource("classpath:application.properties")
+
 @Component
 public class JwtConfig {
 

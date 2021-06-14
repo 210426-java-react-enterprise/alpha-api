@@ -5,7 +5,6 @@ import com.revature.models.User;
 import com.revature.repos.EventRepository;
 import org.jetbrains.annotations.NotNull;
 
-import static com.sun.tools.doclint.Entity.times;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.Before; 
@@ -97,13 +96,12 @@ public void testSaveEvent() throws Exception {
 //TODO: Test goes here...
     Event event = new Event();
     sut.saveEvent(event);
-    verify(mockEventRepository,times(1)).save(event);
+    verify(mockEventRepository, times(1)).save(event);
 
+}
 
-<<<<<<< HEAD
-=======
 @Test
-public void testEventProcess() throws Exception { 
+public void testEventProcess() throws Exception {
 //TODO: Test goes here...
 
 /* 
@@ -115,9 +113,10 @@ try {
 } catch(IllegalAccessException e) { 
 } catch(InvocationTargetException e) { 
 } 
-*/ 
->>>>>>> 04bcdc83280bef77f395f5354bb61857cf556a2e
+*/
+    }
+
 } 
 
 
-} 
+
