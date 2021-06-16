@@ -19,7 +19,7 @@ public class Event {
     private int userId;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "event_url",nullable = false)
     private String event_url;
 
     @Column(nullable = false)

@@ -6,6 +6,11 @@ public class PrincipalDTO {
     private int id;
     private String username;
 
+    public PrincipalDTO()
+    {
+        super();
+    }
+
     public PrincipalDTO(Claims jwtClaims) {
         this.id = Integer.parseInt(jwtClaims.getId());
         this.username = jwtClaims.getSubject();
