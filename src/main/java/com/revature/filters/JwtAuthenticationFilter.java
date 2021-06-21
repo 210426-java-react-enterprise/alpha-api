@@ -1,6 +1,5 @@
 package com.revature.filters;
 
-import com.revature.security.JwtConfig;
 import com.revature.security.JwtUtility;
 import com.revature.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -17,24 +17,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    @Autowired
     private JwtUtility jwtUtils;
-
+    @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
     public JwtAuthenticationFilter(){
         super();
-    }
-
-    @Autowired
-    public void setJwtUtils(JwtUtility jwtUtils) {
-        this.jwtUtils = jwtUtils;
-    }
-    @Autowired
-    public void setUserDetailsService(UserDetailsServiceImpl userDetailsService) {
-        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -49,6 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
                         userDetails.getAuthorities());
+
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);

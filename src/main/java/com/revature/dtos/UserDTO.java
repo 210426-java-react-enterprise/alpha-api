@@ -24,6 +24,19 @@ public class UserDTO {
 
     private int id;
 
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    private Boolean wantsWeeklyUpdates;
+
+
     public UserDTO(){
         super();
     }
@@ -95,4 +108,8 @@ public class UserDTO {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public Boolean getWantsWeeklyUpdates() { return wantsWeeklyUpdates; }
+
+    public void setWantsWeeklyUpdates(Boolean wantsWeeklyUpdates) { this.wantsWeeklyUpdates = wantsWeeklyUpdates; }
 }

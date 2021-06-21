@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.models.Location;
 import com.revature.repos.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,6 +28,9 @@ public class LocationController
         this.locationRepository = locationRepository;
     }
 
+//    Use this format to secure methods to only be available to specific users, will check JWT permissions
+
+//    @PreAuthorize("hasRole('BASIC_USER')")
     @RequestMapping("/coordinates")
     public String getCoordinates(@RequestParam String country, @RequestParam String state, @RequestParam String city)
     {
@@ -110,9 +114,7 @@ public class LocationController
     @RequestMapping("/getLocationByCountryAndState")
     public Set<Location> getLocationByCountryAndState(@RequestParam String cr, @RequestParam String st)
     {
-        Set<Location> locations = locationRepository.findLocationByCountryAndState(cr, st);
-        System.out.println(locations);
-        return locations; /*locationRepository.findLocationByCountryAndState(country, state);*/
+       return locationRepository.findLocationByCountryAndState(cr, st);
     }
 
     private Set<String> locationToString(Collection<Location> locations, Method method)

@@ -1,67 +1,72 @@
 package com.revature.controllers;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.revature.dtos.CredentialsDTO;
+import com.revature.dtos.EmailInfoDTO;
 import com.revature.dtos.UserDTO;
 import com.revature.exceptions.EmailUnavailibleException;
 import com.revature.exceptions.InvalidRequestException;
 import com.revature.exceptions.UsernameUnavailibleException;
+import com.revature.models.Mail;
 import com.revature.models.User;
-import com.revature.repos.UserRepository;
 import com.revature.security.JwtConfig;
 import com.revature.security.TokenGenerator;
+import com.revature.services.MailServiceImpl;
 import com.revature.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
 import static org.springframework.http.MediaType.*;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-   private UserRepository userRepository;
-   private PasswordEncoder encoder;
    private UserService userService;
    private TokenGenerator tokenGenerator;
    private JwtConfig jwtConfig;
+   private MailServiceImpl mailService;
 
     @Autowired
-    public AuthController(UserRepository userRepository, PasswordEncoder encoder,UserService userService, TokenGenerator tokenGenerator, JwtConfig jwtConfig) {
-        this.userRepository = userRepository;
-        this.encoder = encoder;
+    public AuthController(UserService userService, TokenGenerator tokenGenerator, JwtConfig jwtConfig, MailServiceImpl mailService) {
         this.userService = userService;
         this.tokenGenerator = tokenGenerator;
         this.jwtConfig = jwtConfig;
+        this.mailService = mailService;
+
     }
 
-    @PostMapping(name = "/login",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @RequestMapping("/login")
+    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> authenticate(@RequestBody @Valid CredentialsDTO credentials, HttpServletResponse resp) {
-        User user = userService.authenticate(credentials.getUsername(), encoder.encode(credentials.getPassword()));
+        User user = userService.authenticate(credentials.getUsername(), credentials.getPassword());
+        System.out.println(user);
+        user.setAuthorizationLevel(user.getAuthorizationLevel());
         String jwt = tokenGenerator.createJwt(user);
         resp.setHeader(jwtConfig.getHeader(), jwt);
+        user.setToken(jwt);
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping(name = "/register",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> registerUser(@Valid @RequestBody UserDTO signUpRequest, HttpServletResponse resp) {
+    @RequestMapping("/register")
+    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> registerUser(@RequestBody UserDTO signUpRequest, HttpServletResponse resp) {
         User registerUser = new User();
         registerUser.setUsername(signUpRequest.getUsername());
-        registerUser.setPassword(encoder.encode(signUpRequest.getPassword()));
+        registerUser.setPassword(signUpRequest.getPassword());
         registerUser.setEmail(signUpRequest.getEmail());
         registerUser.setFirstName(signUpRequest.getFirstName());
         registerUser.setLastName(signUpRequest.getLastName());
         registerUser.setCity(signUpRequest.getCity());
         registerUser.setState(signUpRequest.getState());
-
+        registerUser.setAuthorizationLevel(2);
+        registerUser.setWantsWeeklyUpdates(signUpRequest.getWantsWeeklyUpdates());
         try{
             userService.register(registerUser);
         }catch (UsernameUnavailibleException e){
@@ -84,5 +89,7 @@ public class AuthController {
         credentialsDTO.setPassword(registerUser.getPassword());
         return ResponseEntity.ok(authenticate(credentialsDTO,resp));
         }
+
+
     }
 
